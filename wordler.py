@@ -120,7 +120,7 @@ def possible_words(hint):
 
     to_remove = set()
 
-    for word in words:
+    for word in result:
         letters_in_word = dict()
 
         for i in range(len(hint.guess)):
