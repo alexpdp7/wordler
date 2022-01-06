@@ -1,4 +1,5 @@
 import enum
+import multiprocessing
 import string
 
 try:
@@ -144,7 +145,7 @@ def possible_words(hint):
 def average_possibles_after(guess):
     a = 0
     b = 0
-    for word in tqdm(words):
+    for word in words:
         if word == guess:
             continue
         hint = Hint(guess, word)
@@ -154,11 +155,14 @@ def average_possibles_after(guess):
     return b/a
 
 
+def _xxx(w):
+    return {'guess': w, 'avg': average_possibles_after(w)}
+
 def xxx():
     result = []
-    for guess in tqdm(words):
-        result.append({
-            "guess": guess,
-            "avg_possibles": average_possibles_after(guess),
-        })
+    with multiprocessing.Pool() as pool:
+        with tqdm(total=len(words)) as progress:
+            for guess_result in pool.imap_unordered(_xxx, words):
+                result.append(guess_result)
+                progress.update()
     return result
