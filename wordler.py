@@ -72,12 +72,16 @@ class Hint:
     def pretty(self):
         return "".join([s.value for s in self.state])
 
-    def greys(self):
+    def set_of_color(self, color):
         """
-        >>> Hint("cabal", "banal").greys()
+        >>> Hint("cabal", "banal").set_of_color(LetterState.GREY)
         {'c'}
+        >>> Hint("cabal", "banal").set_of_color(LetterState.YELLOW)
+        {'b'}
+        >>> Hint("cabal", "banal").set_of_color(LetterState.GREEN) == {'a', 'l'}
+        True
         """
-        return set([l for i, l in enumerate(self.guess) if self.state[i] == LetterState.GREY])
+        return set([l for i, l in enumerate(self.guess) if self.state[i] == color])
 
 
 def possible_words(hint):
@@ -98,9 +102,8 @@ def possible_words(hint):
 
     words_without, words_with = words_wo.words_wo()
 
-    # remove words that have a letter that was grey
-    # FIXME: this is incorrect! if guess had two L, and one was a green!
-    for gl in hint.greys():
+    # remove words that have a letter that appears only as grey
+    for gl in hint.set_of_color(LetterState.GREY) - (hint.set_of_color(LetterState.YELLOW) | hint.set_of_color(LetterState.GREEN)):
         result.intersection_update(words_without[gl])
 
     # has = non-grey letters
