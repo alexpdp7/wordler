@@ -155,14 +155,16 @@ def average_possibles_after(guess):
     return b/a
 
 
-def _xxx(w):
+def _words_according_to_average_possibles_after_to_dict(w):
     return {'guess': w, 'avg': average_possibles_after(w)}
 
-def xxx():
+
+def words_according_to_average_possibles_after():
     result = []
     with multiprocessing.Pool() as pool:
         with tqdm(total=len(words)) as progress:
-            for guess_result in pool.imap_unordered(_xxx, words):
+
+            for guess_result in pool.imap_unordered(_words_according_to_average_possibles_after_to_dict, words):
                 result.append(guess_result)
                 progress.update()
     return result
