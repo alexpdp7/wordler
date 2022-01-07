@@ -112,7 +112,7 @@ def possible_words(hint):
         if hint.state[i] != LetterState.GREY:
             has.add(hint.guess[i])
 
-    # only keep words which have all grey letters
+    # only keep words which have all non-grey letters
     for ha in has:
         result.intersection_update(words_with[ha])
 
