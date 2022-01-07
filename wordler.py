@@ -99,6 +99,7 @@ def possible_words(hint):
     words_without, words_with = words_wo.words_wo()
 
     # remove words that have a letter that was grey
+    # FIXME: this is incorrect! if guess had two L, and one was a green!
     for gl in hint.greys():
         result.intersection_update(words_without[gl])
 
