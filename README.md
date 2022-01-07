@@ -20,3 +20,11 @@ The results are stored in `words_according_to_average_possibles_after.py`.
 >>> s[-10:]
 [{'guess': 'jazzy', 'avg': 1607.7594165033747}, {'guess': 'whizz', 'avg': 1631.6518615284128}, {'guess': 'jiffy', 'avg': 1638.4038754626606}, {'guess': 'fizzy', 'avg': 1639.1421728717614}, {'guess': 'fluff', 'avg': 1653.398432397126}, {'guess': 'yuppy', 'avg': 1731.7602873938602}, {'guess': 'puppy', 'avg': 1764.747006313956}, {'guess': 'yummy', 'avg': 1809.4726758110169}, {'guess': 'mummy', 'avg': 1847.1295449597212}, {'guess': 'fuzzy', 'avg': 1976.2268669714783}]
 ```
+
+# Hacking
+
+Run tests with:
+
+```
+$ python3 -m doctest wordler.py
+```

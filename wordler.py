@@ -81,6 +81,18 @@ class Hint:
 
 
 def possible_words(hint):
+    """
+    >>> possibles_after_fuzzy_if_banal = possible_words(Hint("fuzzy", "banal"))
+    >>> len(possibles_after_fuzzy_if_banal)
+    2921
+    >>> possibles_after_eases_if_banal = possible_words(Hint("eases", "banal"))
+    >>> len(possibles_after_eases_if_banal)
+    210
+    >>> "later" in possibles_after_eases_if_banal
+    False
+    >>> "later" in possibles_after_fuzzy_if_banal
+    True
+    """
     # all words are possible
     result = set(words)
 
