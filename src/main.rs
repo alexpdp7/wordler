@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::io::BufRead;
 
-fn is_lowercase_ascii(s: &String) -> bool {
+fn is_lowercase_ascii(s: &str) -> bool {
     s.as_bytes().iter().all(|c| b'a' <= *c && *c <= b'z')
 }
 
