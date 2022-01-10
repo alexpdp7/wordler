@@ -1,5 +1,6 @@
 import enum
 import multiprocessing
+import random
 import string
 
 try:
@@ -83,22 +84,59 @@ class Hint:
         """
         return set([l for i, l in enumerate(self.guess) if self.state[i] == color])
 
+    def __str__(self):
+        return f"Guessing {self.guess} for {self.word}... {self.pretty()}"
 
-def possible_words(hint):
+
+def get_possible_words(hints):
     """
-    >>> possibles_after_fuzzy_if_banal = possible_words(Hint("fuzzy", "banal"))
+    >>> possibles_after_fuzzy_if_banal = get_possible_words([Hint("fuzzy", "banal")])
     >>> len(possibles_after_fuzzy_if_banal)
     2921
-    >>> possibles_after_eases_if_banal = possible_words(Hint("eases", "banal"))
+    >>> possibles_after_eases_if_banal = get_possible_words([Hint("eases", "banal")])
     >>> len(possibles_after_eases_if_banal)
     210
     >>> "later" in possibles_after_eases_if_banal
     False
     >>> "later" in possibles_after_fuzzy_if_banal
     True
+    >>> len(get_possible_words([Hint("niece", "leans")])) > 0
+    True
     """
-    # all words are possible
     result = set(words)
+
+    for hint in hints:
+        result = _get_possible_words(result, hint)
+
+    return result
+
+
+def _keep_words_matching_greens(possible_words, hint):
+    """
+    >>> _keep_words_matching_greens(["tulle", "hovel"], Hint("zzzze", "tulle"))
+    {'tulle'}
+    """
+
+    result = set(possible_words)
+
+    # only keep words matching greens
+    not_matching_greens = set()
+    for word in result:
+        def matches_greens():
+            for i in range(len(hint.guess)):
+                if hint.state[i] == LetterState.GREEN and hint.guess[i] != word[i]:
+                    return False
+            return True
+
+        if not matches_greens():
+            not_matching_greens.add(word)
+
+    result.difference_update(not_matching_greens)
+    return result
+
+
+def _get_possible_words(possible_words, hint):
+    result = _keep_words_matching_greens(set(possible_words), hint)
 
     words_without, words_with = words_wo.words_wo()
 
@@ -116,19 +154,6 @@ def possible_words(hint):
     for ha in has:
         result.intersection_update(words_with[ha])
 
-    # only keep words matching greens
-    not_matching_greens = set()
-    for word in result:
-        def matches_greens():
-            for i in range(len(hint.guess)):
-                if hint.state[i] == LetterState.GREEN and hint.guess[i] != word[i]:
-                    return False
-            return True
-
-        if not matches_greens():
-            not_matching_greens.add(word)
-
-    result.difference_update(not_matching_greens)
 
     yellows_in_guess = dict()
     for i in range(len(hint.guess)):
@@ -165,7 +190,7 @@ def average_possibles_after(guess):
         if word == guess:
             continue
         hint = Hint(guess, word)
-        possibles = len(possible_words(hint))
+        possibles = len(get_possible_words([hint]))
         a = a + 1
         b = b + possibles
     return b/a
@@ -184,3 +209,23 @@ def words_according_to_average_possibles_after():
                 result.append(guess_result)
                 progress.update()
     return result
+
+
+def try_to_guess_with_initial_word_then_random_possible_choices(initial_guess, solution):
+    print(f"Solution is {solution}")
+    hints = []
+    while True:
+        if hints:
+            possible_words = get_possible_words(hints)
+            some_possible_words = ", ".join(list(possible_words)[0:10])
+            print(f"There are {len(possible_words)} words possible now, among them... {some_possible_words}")
+            guess = random.choice(list(possible_words))
+        else:
+            guess = initial_guess
+
+        print(f"Trying {guess}")
+        hint = Hint(guess, solution)
+        print(hint.pretty())
+        hints.append(hint)
+        if guess == solution:
+            return hints
