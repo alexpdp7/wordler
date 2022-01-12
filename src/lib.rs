@@ -27,6 +27,12 @@ pub fn pretty_eval(evaluation: &[CharScore]) -> String {
     evaluation.iter().map(|cs| format!("{}", cs)).collect()
 }
 
+/// ```
+/// use wordler::{pretty_eval, evaluate};
+///
+/// assert_eq!(pretty_eval(&evaluate(['a', 'b', 'c', 'd', 'e'], ['a', 'b', 'd', 'c', 'f'])), "OOXX.");
+/// assert_eq!(pretty_eval(&evaluate(['b', 'b', 'b', 'a', 'a'], ['a', 'a', 'b', 'b', 'b'])), "XXOXX");
+/// ```
 pub fn evaluate<const N: usize>(guess: [char; N], solution: [char; N]) -> [CharScore; N] {
     let mut result: [CharScore; N] = [CharScore::NotFound; N];
 
