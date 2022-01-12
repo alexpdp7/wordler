@@ -1,19 +1,11 @@
-use wordler::{evaluate, pretty_eval};
+use wordler::{dict, evaluate, pretty_eval};
 
 fn main() {
-    println!(
-        "{}",
-        pretty_eval(&evaluate(
-            ['a', 'b', 'c', 'd', 'e'],
-            ['a', 'b', 'd', 'c', 'f']
-        ))
-    );
-
-    println!(
-        "{}",
-        pretty_eval(&evaluate(
-            ['b', 'b', 'b', 'a', 'a'],
-            ['a', 'a', 'b', 'b', 'b']
-        ))
+    print!(
+        "{:?}",
+        dict::<5>()
+            .iter()
+            .map(|w| pretty_eval(&evaluate(*w, ['a', 'b', 'c', 'd', 'e'])))
+            .collect::<Vec<String>>()
     );
 }
