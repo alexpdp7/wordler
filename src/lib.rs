@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 use std::io::BufRead;
 use std::ops::Range;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum CharScore {
     Correct,
     Misplaced,
@@ -101,4 +101,26 @@ pub fn dict<const N: usize>() -> HashSet<[char; N]> {
         .filter(|l| is_lowercase_ascii(l))
         .map(to_char_array)
         .collect()
+}
+
+fn count<T: Eq + std::hash::Hash>(i: &mut dyn Iterator<Item = T>) -> HashMap<T, usize> {
+    i.fold(HashMap::new(), |mut ac, e| {
+        *(ac.entry(e).or_insert(0)) += 1;
+        ac
+    })
+}
+
+fn word_to_count_evaluations<const N: usize>(
+    dict: &HashSet<[char; N]>,
+    word: [char; N],
+) -> HashMap<[CharScore; N], usize> {
+    count(&mut dict.iter().map(|w| evaluate(*w, word)))
+}
+
+fn count_to_quality<const N: usize>(count: HashMap<[CharScore; N], usize>) -> usize {
+    count.values().map(|c| c * c).sum()
+}
+
+pub fn quality<const N: usize>(dict: &HashSet<[char; N]>, word: [char; N]) -> usize {
+    count_to_quality(word_to_count_evaluations(dict, word))
 }

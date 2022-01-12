@@ -1,11 +1,8 @@
-use wordler::{dict, evaluate, pretty_eval};
+use wordler::{dict, quality};
 
 fn main() {
-    print!(
-        "{:?}",
-        dict::<5>()
-            .iter()
-            .map(|w| pretty_eval(&evaluate(*w, ['a', 'b', 'c', 'd', 'e'])))
-            .collect::<Vec<String>>()
-    );
+    let dict5 = dict::<5>();
+    for w in &dict5 {
+        println!("{} {}", quality(&dict5, *w), w.iter().collect::<String>());
+    }
 }
