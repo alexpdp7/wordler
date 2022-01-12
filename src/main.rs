@@ -9,6 +9,24 @@ enum CharScore {
     NotFound,
 }
 
+impl std::fmt::Display for CharScore {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                CharScore::Correct => "O",
+                CharScore::Misplaced => "X",
+                CharScore::NotFound => ".",
+            }
+        )
+    }
+}
+
+fn pretty_eval(evaluation: &[CharScore]) -> String {
+    evaluation.iter().map(|cs| format!("{}", cs)).collect()
+}
+
 fn evaluate<const N: usize>(guess: [char; N], solution: [char; N]) -> [CharScore; N] {
     let mut result: [CharScore; N] = [CharScore::NotFound; N];
 
@@ -72,12 +90,18 @@ fn dict() -> HashSet<String> {
 
 fn main() {
     println!(
-        "{:?}",
-        evaluate(['a', 'b', 'c', 'd', 'e'], ['a', 'b', 'd', 'c', 'f'])
+        "{}",
+        pretty_eval(&evaluate(
+            ['a', 'b', 'c', 'd', 'e'],
+            ['a', 'b', 'd', 'c', 'f']
+        ))
     );
 
     println!(
-        "{:?}",
-        evaluate(['b', 'b', 'b', 'a', 'a'], ['a', 'a', 'b', 'b', 'b'])
+        "{}",
+        pretty_eval(&evaluate(
+            ['b', 'b', 'b', 'a', 'a'],
+            ['a', 'a', 'b', 'b', 'b']
+        ))
     );
 }
