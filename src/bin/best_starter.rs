@@ -1,4 +1,5 @@
-use wordler::*;
+use wordler::dict::dict;
+use wordler::quality;
 
 fn main() {
     let dict = dict::<5>();
