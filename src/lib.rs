@@ -124,13 +124,3 @@ fn count_to_quality<const N: usize>(count: HashMap<[CharScore; N], usize>) -> us
 pub fn quality<const N: usize>(dict: &HashSet<[char; N]>, word: [char; N]) -> usize {
     count_to_quality(word_to_count_evaluations(dict, word))
 }
-
-pub fn best_quality<const N: usize>(dict: &HashSet<[char; N]>) -> [char; N] {
-    let mut x = dict
-        .iter()
-        .map(|w| (w, quality(dict, *w)))
-        .collect::<Vec<(&[char; N], usize)>>();
-
-    x.sort_by_key(|(_, q)| *q);
-    *x[0].0
-}

@@ -1,5 +1,13 @@
 use wordler::*;
 
 fn main() {
-    println!("{}", best_quality(&dict::<5>()).iter().collect::<String>());
+    let dict = dict::<5>();
+    println!(
+        "{}",
+        dict.iter()
+            .min_by_key(|w| quality(&dict, **w))
+            .unwrap()
+            .iter()
+            .collect::<String>()
+    );
 }
