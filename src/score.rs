@@ -22,10 +22,6 @@ impl std::fmt::Display for CharScore {
     }
 }
 
-pub fn pretty_eval(evaluation: &[CharScore]) -> String {
-    evaluation.iter().map(|cs| format!("{}", cs)).collect()
-}
-
 /// ```
 /// use wordler::score::{evaluate,pretty_eval};
 ///
@@ -78,4 +74,13 @@ pub fn evaluate<const N: usize>(guess: [char; N], solution: [char; N]) -> [CharS
     }
 
     result
+}
+
+/// ```
+/// use wordler::score::{pretty_eval, CharScore};
+///
+/// assert_eq!(pretty_eval(&[CharScore::Correct, CharScore::Correct, CharScore::Misplaced, CharScore::Misplaced, CharScore::NotFound]), "OOXX.");
+/// ```
+pub fn pretty_eval(evaluation: &[CharScore]) -> String {
+    evaluation.iter().map(|cs| format!("{}", cs)).collect()
 }
